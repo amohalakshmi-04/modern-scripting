@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logical Operators - Switch Case</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Full Dark Background */
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+}
+
+/* Light Glass Card */
+.container{
+    background: rgba(255,255,255,0.95);
+    padding:40px;
+    border-radius:20px;
+    width:400px;
+    text-align:center;
+    box-shadow:0 15px 40px rgba(0,0,0,0.5);
+    color:#1e1e2f;
+}
+
+/* Heading */
+h1{
+    margin-bottom:25px;
+    color:#2c5364;
+}
+
+/* Inputs */
+input, select{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid #ccc;
+    outline:none;
+    font-size:16px;
+}
+
+/* Button */
+button{
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+    border:none;
+    border-radius:10px;
+    background:#2c5364;
+    color:#ffffff;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#0f2027;
+    transform:scale(1.05);
+}
+
+/* Result Display - Light Highlight Box */
+.result{
+    margin-top:20px;
+    padding:15px;
+    font-size:18px;
+    font-weight:600;
+    background:#f8f9fa;
+    color:#2c5364;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Logical Operator Switch</h1>
+
+    <input type="number" id="num1" placeholder="Enter First Number">
+    <input type="number" id="num2" placeholder="Enter Second Number">
+
+    <select id="operator">
+        <option value="AND">AND (&&)</option>
+        <option value="OR">OR (||)</option>
+        <option value="NOT">NOT (!)</option>
+    </select>
+
+    <button onclick="calculate()">Evaluate</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+function calculate(){
+
+    let a = parseInt(document.getElementById("num1").value);
+    let b = parseInt(document.getElementById("num2").value);
+    let operator = document.getElementById("operator").value;
+    let result;
+
+    switch(operator){
+
+        case "AND":
+            result = (a > 0 && b > 0);
+            break;
+
+        case "OR":
+            result = (a > 0 || b > 0);
+            break;
+
+        case "NOT":
+            result = !(a > 0);
+            break;
+
+        default:
+            result = "Invalid Operator";
+    }
+
+    document.getElementById("result").innerHTML =
+        "Result: <strong>" + result + "</strong>";
+}
+</script>
+
+</body>
+</html>
