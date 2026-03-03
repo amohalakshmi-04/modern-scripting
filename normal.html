@@ -1,73 +1,70 @@
 <!DOCTYPE html>
-<!-- 1. ng-app name MUST match app.module in script -->
-<html ng-app="arithmeticApp">
+<html ng-app="mathApp">
 <head>
-    <title>Arithmetic Pro</title>
-    <!-- 2. Essential: Online AngularJS Library -->
-    <script src="C:\Users\I Year B\Desktop\angular.min.js"></script>
+    <title>AngularJS Arithmetic</title>
+    <!-- AngularJS CDN Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     
     <style>
         [ng-cloak] { display: none !important; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; background-color: #f9f9f9; }
-        .calc-box { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; }
-        input { padding: 8px; width: 100px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; }
-        button { padding: 10px 15px; margin: 5px; cursor: pointer; border: 1px solid #ccc; border-radius: 4px; background: #eee; font-weight: bold; }
-        button:hover { background: #ddd; }
-        .result { margin-top: 20px; font-size: 22px; color: #2c3e50; }
-        .stats { color: #7f8c8d; font-size: 14px; margin-bottom: 10px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 50px; }
+        .calc-card { background: white; padding: 30px; border-radius: 12px; shadow: 0 8px 24px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+        .global-stats { color: #7f8c8d; font-size: 13px; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        input { width: 80%; padding: 12px; margin: 10px 0; border: 2px solid #e1e4e8; border-radius: 8px; font-size: 16px; outline: none; }
+        .btn-group { margin: 15px 0; display: flex; justify-content: space-around; }
+        button { padding: 12px 18px; border: none; border-radius: 6px; background: #3498db; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #2980b9; transform: scale(1.05); }
+        .result-box { margin-top: 20px; font-size: 24px; color: #2c3e50; }
+        .error { color: #e74c3c; font-size: 14px; }
     </style>
 </head>
-<body ng-controller="CalcController" ng-cloak>
+<body ng-cloak>
 
-    <div class="calc-box">
-        <!-- rootScope data -->
-        <h3>App: {{appName}}</h3>
-        <div class="stats">Operations Count: {{calcCount}}</div>
-        
-        <hr>
+    <div class="calc-card" ng-controller="MathController">
+        <!-- RootScope Data (Global) -->
+        <h2>{{appName}}</h2>
+        <div class="global-stats">Total Calculations Made: {{calcCount}}</div>
 
-        <!-- scope data -->
-        <input type="number" ng-model="n1" placeholder="9">
-        <input type="number" ng-model="n2" placeholder="10">
-        
-        <div style="margin-top: 15px;">
-            <button ng-click="doMath('+')">Add</button>
-            <button ng-click="doMath('-')">Subtract</button>
-            <button ng-click="doMath('*')">Multiply</button>
-            <button ng-click="doMath('/')">Divide</button>
+        <!-- Scope Data (Local to Controller) -->
+        <input type="number" ng-model="num1" placeholder="First Number">
+        <input type="number" ng-model="num2" placeholder="Second Number">
+
+        <div class="btn-group">
+            <button ng-click="calculate('+')">+</button>
+            <button ng-click="calculate('-')">-</button>
+            <button ng-click="calculate('*')">×</button>
+            <button ng-click="calculate('/')">÷</button>
         </div>
 
-        <!-- The actual result printing area -->
-        <div class="result">
-            Result: <strong>{{result}}</strong>
+        <div class="result-box">
+            <span ng-if="result !== undefined">Result: <strong>{{result}}</strong></span>
         </div>
     </div>
 
     <script>
-        // Define the Module
-        var app = angular.module('arithmeticApp', []);
+        var app = angular.module('mathApp', []);
 
-        // rootScope: Global data shared across the app
+        // Use $rootScope for variables accessible across the entire app
         app.run(function($rootScope) {
-            $rootScope.appName = "Secure Calculator";
+            $rootScope.appName = "Arithmetic Pro";
             $rootScope.calcCount = 0;
         });
 
-        // scope: Local data for this specific controller
-        app.controller('CalcController', function($scope, $rootScope) {
-            $scope.doMath = function(op) {
-                // Prevent calculation if inputs are empty
-                if ($scope.n1 === undefined || $scope.n2 === undefined) return;
+        // Use $scope for logic specific to this controller
+        app.controller('MathController', function($scope, $rootScope) {
+            $scope.calculate = function(operator) {
+                if ($scope.num1 === undefined || $scope.num2 === undefined) return;
 
-                // Perform Logic
-                switch(op) {
-                    case '+': $scope.result = $scope.n1 + $scope.n2; break;
-                    case '-': $scope.result = $scope.n1 - $scope.n2; break;
-                    case '*': $scope.result = $scope.n1 * $scope.n2; break;
-                    case '/': $scope.result = ($scope.n2 !== 0) ? ($scope.n1 / $scope.n2) : "Div by 0 Error"; break;
+                switch(operator) {
+                    case '+': $scope.result = $scope.num1 + $scope.num2; break;
+                    case '-': $scope.result = $scope.num1 - $scope.num2; break;
+                    case '*': $scope.result = $scope.num1 * $scope.num2; break;
+                    case '/': 
+                        $scope.result = ($scope.num2 !== 0) ? ($scope.num1 / $scope.num2).toFixed(2) : "Div by 0!";
+                        break;
                 }
-
-                // Increment global counter
+                
+                // Update the global counter in $rootScope
                 $rootScope.calcCount++;
             };
         });
